@@ -1,4 +1,4 @@
 development:
   dialect: sqlite3
-  datasource: kel15.db
+  datasource: codein.db
   dir: migrations

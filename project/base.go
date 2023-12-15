@@ -1,8 +1,8 @@
 package project
 
 import (
-	"kel15/storage"
-	"kel15/usecase"
+	"codein/storage"
+	"codein/usecase"
 )
 
 type Project struct {

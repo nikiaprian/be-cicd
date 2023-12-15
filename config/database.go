@@ -3,14 +3,14 @@ package config
 import (
 	"database/sql"
 	"fmt"
-	"kel15/services"
+	"codein/services"
 
 	_ "github.com/lib/pq"
 )
 
 func NewPostgreSQLDB() (*services.PostgreSQL, error) {
 	connectionString := fmt.Sprintf(
-		"host=localhost port=5432 user=postgres password=agungsmpn22 dbname=postgres sslmode=disable",
+		"host=52.11.90.192 port=5432 user=postgres password=postgres dbname=ec2postgres sslmode=disable",
 	)
 
 	db, err := sql.Open("postgres", connectionString)

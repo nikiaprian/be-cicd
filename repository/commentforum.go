@@ -3,7 +3,7 @@ package repository
 import (
 	"database/sql"
 	"errors"
-	"kel15/models"
+	"codein/models"
 	"time"
 
 	"github.com/gin-gonic/gin"

@@ -1,6 +1,6 @@
 package repository
 
-import "kel15/services"
+import "codein/services"
 
 type Repository struct {
 	db *services.PostgreSQL

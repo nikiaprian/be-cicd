@@ -2,7 +2,7 @@ package handler
 
 import (
 	"errors"
-	"kel15/models"
+	"codein/models"
 	"strings"
 
 	"github.com/gin-gonic/gin"

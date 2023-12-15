@@ -1,6 +1,6 @@
 package usecase
 
-import "kel15/repository"
+import "codein/repository"
 
 type Usecase struct {
 	repository *repository.Repository

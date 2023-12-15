@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"kel15/models"
+	"codein/models"
 	"math"
 	"strconv"
 

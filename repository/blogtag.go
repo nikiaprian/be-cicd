@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"kel15/models"
+	"codein/models"
 
 	"github.com/gin-gonic/gin"
 )

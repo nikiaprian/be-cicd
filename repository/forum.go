@@ -2,7 +2,7 @@ package repository
 
 import (
 	"database/sql"
-	"kel15/models"
+	"codein/models"
 	"time"
 
 	"github.com/gin-gonic/gin"

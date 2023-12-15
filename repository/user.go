@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"kel15/models"
-	"kel15/utils"
+	"codein/models"
+	"codein/utils"
 	"strings"
 	"time"
 

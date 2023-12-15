@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"kel15/models"
+	"codein/models"
 	"strconv"
 
 	"github.com/gin-gonic/gin"

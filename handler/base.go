@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"kel15/models"
-	"kel15/project"
+	"codein/models"
+	"codein/project"
 )
 
 type Handler struct {

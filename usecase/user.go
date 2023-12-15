@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"errors"
 	"io/ioutil"
-	"kel15/models"
+	"codein/models"
 	"net/url"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/oauth2"
 
-	"kel15/config"
-	utils "kel15/utils"
+	"codein/config"
+	utils "codein/utils"
 )
 
 func (usecase *Usecase) UserList(c *gin.Context) ([]models.User, error) {

@@ -2,8 +2,8 @@ package handler
 
 import (
 	"fmt"
-	"kel15/models"
-	"kel15/utils"
+	"codein/models"
+	"codein/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

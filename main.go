@@ -1,12 +1,12 @@
 package main
 
 import (
-	"kel15/config"
-	"kel15/handler"
-	"kel15/project"
-	"kel15/repository"
-	"kel15/storage"
-	"kel15/usecase"
+	"codein/config"
+	"codein/handler"
+	"codein/project"
+	"codein/repository"
+	"codein/storage"
+	"codein/usecase"
 	"log"
 	"net/http"
 	"time"
