@@ -1,0 +1,1118 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/rchmatagung/CodeIn/1.0.0
+  - description: Local Development
+    url: http://127.0.0.1:9090/api/v1
+info:
+  description: Platform Forum Tanya Jawab dan Blog Seputar Dunia Programing
+  version: 1.0.0
+  title: CodeIn
+  contact:
+    email: you@your-company.com
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Users
+      summary: Create New Account CodeIn
+      operationId: createnewuser
+      description: create new account Codein before use feature
+      responses:
+        '200':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: User created successfully
+                  data:
+                    example: null
+        '400':
+          description: body input is required
+      requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - username
+                  - password
+                  - email
+                properties:
+                  username:
+                    type: string
+                    example: rchmatagung
+                  password:
+                    type: string
+                    example: rchmatagung_
+                  email:
+                    type: string
+                    example: rchmatagung@gmail.com
+  /auth/login:
+    post:
+      tags:
+        - Users
+      summary: Login Account CodeIn
+      # operationid: loginuser
+      description: Login account Codein to use feature
+      responses:
+        '200':
+          description: Login successfully
+        '400':
+          description: 'User not found'
+      requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - email
+                  - password
+                properties:
+                  email:
+                    type: string
+                    example: rchmatagung@gmail.com 
+                  password:
+                    type: string
+                    example: rchmatagung_
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Get All Users CodeIn
+      description: Get all users CodeIn
+      responses:
+        '200':
+          description: Success get all users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/User'   
+        '400':
+          description: Failed to get all users
+  /user/update-profile:
+    patch:
+      tags:
+        - Users
+      summary: Update User Profile in CodeIn
+      description: Update user profile
+      responses:
+        '200':
+          description: Success update user profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/User'
+        '400':
+          description: Failed to update user profile
+  /blogs:
+    get:
+      tags:
+        - Blogs
+      summary: Fetch All Blog Data in CodeIn
+      description: Fetch all data blog
+      responses:
+        '200':
+          description: Success fetch all data blog
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/Blog'
+        '400':
+          description: Failed to Fetch All Blog Data
+  /blogs/new:
+    post:
+      tags:
+        - Blogs
+      summary: Create New Blog in CodeIn
+      description: Create new blog
+      responses:
+        '200':
+          description: Blog created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/Blog'
+        '400':
+          description: body input is required
+      requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - photo
+                  - title
+                  - content
+                  - tags
+                properties:
+                  photo:
+                    type: string
+                    example: https://codein.s3.ap-southeast-1.amazonaws.com/user/user-2/profile/2-125d979a-bbcb-41ae-81d0-596658b31d4e-WhatsApp
+                  title:
+                    type: string
+                    example: Cara membuat sebuah codingan tanpa mengetik
+                  content:
+                    type: string
+                    example: bagaimana saya dapat membuat sebuah source code tapi saya tidak perlu mengetik ?
+                  tags:
+                    $ref: '#/components/schemas/Tag'
+  /blogs/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Blogs
+      summary: Get Data Blog By Id
+      description: Get blog by id
+      responses:
+        '200':
+          description: Succes get data blog by id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/Blog'
+        '400':
+          description: Blog Id Not Found
+    delete:
+      tags:
+        - Blogs
+      summary: Delete Data Blog By Id
+      description: Delete blog by id
+      responses:
+        '200':
+          description: Succes delete data blog by id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Delete Blog successfully
+                  data:
+                    example: null
+        '400':
+          description: Blog Id Not Found
+  /like/blog/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    post:
+      tags:
+        - Like Blog
+      summary: Like Blog by Id
+      description: Like Blog
+      responses:
+        '200':
+          description: Succes like blog by id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/BlogLikes'
+        '400':
+          description: Blog Id Not Found
+    delete:
+      tags:
+        - Like Blog
+      summary: Delete Like Blog By Id
+      description: Like Blog
+      responses:
+        '200':
+          description: Succes delete like blog by id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Delete like successfully
+                  data:
+                    example: null
+        '400':
+          description: Blog Id Not Found
+  /comments/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    post:
+      tags:
+        - Comment Blog
+      summary: Create Comment Blog by Blog Id
+      description:  Create comment blog
+      responses:
+        '200':
+          description: Success Create Comment Blog
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/CommentBlog'
+        '400':
+          description: body input is required
+      requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - comment
+                properties:
+                  comment:
+                    type: string
+                    example: Cara membuat sebuah codingan tanpa mengetik
+    get:
+      tags:
+        - Comment Blog
+      summary: Get Comment Blog By Blog Id
+      description: get comment by blog id
+      responses:
+        '200':
+          description: Success Get Comment Blog
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/CommentBlog'
+        '400':
+          description: Blog Id Not Found
+    delete:
+      tags:
+        - Comment Blog
+      summary: Delete Comment Blog by Blog Id
+      description: delete comment blog by id blog
+      responses:
+        '200':
+          description: Success Delete Comment Blog
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    example: null
+        '400':
+          description: Blog Id Not Found
+  /like/blog/comment/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    post:
+      tags:
+        - Comment Like Blog
+      summary: Like Comment Blog by Blog Id
+      description: Like comment blog
+      responses:
+        '200':
+          description: Success Like Comment Blog
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/BlogCommentLike'
+        '400':
+          description: Comment Blog Id Not Found
+    delete:
+      tags:
+        - Comment Like Blog
+      summary: Delete Like Comment Blog By Blog Id
+      description: delete like comment blog
+      responses:
+        '200':
+          description: Success Delete Like Comment Blog
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    example: null
+        '400':
+          description: Comment Blog Id Not Found
+  /forums:
+    get:
+      tags:
+        - Forums
+      summary: Fetch All Forum Data in CodeIn
+      description: Fetch all data forum
+      responses:
+        '200':
+          description: Success fetch all data forum
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/Forum'
+        '400':
+          description: Failed to Fetch All Forum Data
+  /forums/new:
+    post:
+      tags:
+        - Forums
+      summary: Create New Forum in CodeIn
+      description: Create new forum
+      responses:
+        '200':
+          description: Forum created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/Forum'
+        '400':
+          description: body input is required
+      requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - title
+                  - content
+                  - tags
+                properties:
+                  title:
+                    type: string
+                    example: Cara membuat sebuah codingan tanpa mengetik
+                  content:
+                    type: string
+                    example: bagaimana saya dapat membuat sebuah source code tapi saya tidak perlu mengetik ?
+                  tags:
+                    $ref: '#/components/schemas/Tag'
+  /forums/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Forums
+      summary: Get Data Forum By Id
+      description: Get Forum by id
+      responses:
+        '200':
+          description: Succes get data Forum by id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/Forum'
+        '400':
+          description: Forum Id Not Found
+    delete:
+      tags:
+        - Forums
+      summary: Delete Data Forum By Id
+      description: Delete Forum by id
+      responses:
+        '200':
+          description: Succes delete data Forum by id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Delete Forum successfully
+                  data:
+                    example: null
+        '400':
+          description: Forum Id Not Found
+  /like/forum/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    post:
+      tags:
+        - Like Forum
+      summary: Like Forum by Id
+      description: Like Forum
+      responses:
+        '200':
+          description: Succes like forum by id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/ForumLikes'
+        '400':
+          description: Forum Id Not Found
+    delete:
+      tags:
+        - Like Forum
+      summary: Delete Like Forum By Id
+      description: Like Forum
+      responses:
+        '200':
+          description: Succes delete like forum by id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Delete like successfully
+                  data:
+                    example: null
+        '400':
+          description: Forum Id Not Found
+  /commentsforum/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    post:
+      tags:
+        - Comment Forum
+      summary: Create Comment Forum by Forum Id
+      description:  Create comment Forum
+      responses:
+        '200':
+          description: Success Create Comment Forum
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/CommentForum'
+        '400':
+          description: body input is required
+      requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - comment
+                properties:
+                  comment:
+                    type: string
+                    example: Cara membuat sebuah codingan tanpa mengetik
+    get:
+      tags:
+        - Comment Forum
+      summary: Get Comment Forum By Forum Id
+      description: get comment by Forum id
+      responses:
+        '200':
+          description: Success Get Comment Forum
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/CommentForum'
+        '400':
+          description: Forum Id Not Found
+    delete:
+      tags:
+        - Comment Forum
+      summary: Delete Comment Forum by Forum Id
+      description: delete comment forum by id forum
+      responses:
+        '200':
+          description: Success Delete Comment Forum
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Delete comment uccessfully
+                  data:
+                    example: null
+        '400':
+          description: Forum Id Not Found
+  /like/forum/comment/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    post:
+      tags:
+        - Comment Like Forum
+      summary: Like Comment Forum by Forum Id
+      description: Like comment forum
+      responses:
+        '200':
+          description: Success Like Comment Forum
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/ForumCommentLike'
+        '400':
+          description: Comment Forum Id Not Found
+    delete:
+      tags:
+        - Comment Like Forum
+      summary: Delete Like Comment Forum By Forum Id
+      description: delete like comment forum
+      responses:
+        '200':
+          description: Success Delete Like Comment Forum
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    example: null
+        '400':
+          description: Comment Forum Id Not Found
+  /forum/comment/{id}/selected-answer:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    patch:
+      tags:
+        - Forum Selected Answer
+      summary: Choose The Correct Comment Forum
+      description: Choose correct answer forum
+      responses:
+        '200':
+          description: Success Choose Correct Answer
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/CommentForum'
+        '400':
+          description: Comment Forum Id Not Found
+components:
+  schemas:
+    User:
+      type: object
+      required: 
+        - email
+        - username
+        - password
+        - createdAt
+        - updatedAt
+      properties:
+        email:
+          type: string
+          example: rchmatagung@gmail.com
+        username:
+          type: string
+          example: rchmatagung
+        password:
+          type: string
+          example: secret123
+        name:
+          type: string
+          example: Rachmat Agung
+        photo:
+          type: string
+          example: https://codein.s3.ap-southeast-1.amazonaws.com/user/user-2/profile/2-125d979a-bbcb-41ae-81d0-596658b31d4e-WhatsApp
+        role:
+          type: string
+          example: user
+        createdAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+    Tag:
+      type: object
+      required: 
+        - tag
+        - createdAt
+        - updatedAt
+      properties:
+        tag:
+          type: string
+          example: golang
+        createdAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+    ForumLikes:
+      type: object
+      required:
+        - user
+        - forum
+        - createdAt
+        - updatedAt
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        forum:
+          $ref: '#/components/schemas/Forum'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+    Forum:
+      type: object
+      required:
+        - user
+        - title
+        - content
+        - tags
+        - createdAt
+        - updatedAt
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        title:
+          type: string
+          example: Cara membuat sebuah codingan tanpa mengetik
+        content:
+          type: string
+          example: bagaimana saya dapat membuat sebuah source code tapi saya tidak perlu mengetik ?
+        tags:
+          $ref: '#/components/schemas/Tag'
+        forumLikes:
+          $ref: '#/components/schemas/ForumLikes'
+        totalLikes:
+          type: integer
+          example: 10
+        totalComment:
+          type: integer
+          example: 10
+        isYouLike:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+    ForumCommentLike:
+      type: object
+      required:
+        - user
+        - commentForum
+        - createdAt
+        - updatedAt
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        commentForum:
+          $ref: '#/components/schemas/CommentForum'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2017-08-29T09:12:33.001Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2017-08-29T09:12:33.001Z'
+    CommentForum:
+      type: object
+      required:
+        - user
+        - comment
+        - createdAt
+        - updatedAt
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        forumId:
+          type: integer
+          example: 1
+        comment:
+          type: string
+          example: caranya dengan tidak mengcoding
+        isAnswer:
+          type: boolean
+          example: true
+        forumCommentLike:
+          $ref: '#/components/schemas/ForumCommentLike'
+        totalLikes:
+          type: integer
+          example: 11
+        isYouLike:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+    ForumTag:
+      type: object
+      required: 
+        - forumId
+        - tagid
+      properties:
+        forumId:
+          type: integer
+          example: 1
+        tagid:
+          type: integer
+          example: 1
+    Blog:
+      type: object
+      required:
+        - user
+        - photo
+        - title
+        - content
+        - tags
+        - createdAt
+        - updatedAt
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        photo:
+          type: string
+          example: https://codein.s3.ap-southeast-1.amazonaws.com/user/user-2/profile/2-125d979a-bbcb-41ae-81d0-596658b31d4e-WhatsApp
+        title:
+          type: string
+          example: Cara membuat sebuah codingan tanpa mengetik
+        content:
+          type: string
+          example: bagaimana saya dapat membuat sebuah source code tapi saya tidak perlu mengetik ?
+        tags:
+          $ref: '#/components/schemas/Tag'
+        blogLikes:
+          $ref: '#/components/schemas/BlogLikes'
+        totalLikes:
+          type: integer
+          example: 10
+        totalComment:
+          type: integer
+          example: 10
+        isYouLike:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+    BlogLikes:
+      type: object
+      required:
+        - user
+        - blog
+        - createdAt
+        - updatedAt
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        forum:
+          $ref: '#/components/schemas/Blog'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+    BlogTag:
+      type: object
+      required: 
+        - blogId
+        - tagid
+      properties:
+        forumId:
+          type: integer
+          example: 1
+        tagid:
+          type: integer
+          example: 1
+    CommentBlog:
+      type: object
+      required:
+        - user
+        - comment
+        - blogid
+        - createdAt
+        - updatedAt
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        comment:
+          type: string
+          example: Sangat bermanfaat min
+        blogId:
+          type: integer
+          example: 1
+        blogCommentLike:
+          $ref: '#/components/schemas/BlogCommentLike'
+        totalLikes:
+          type: integer
+          example: 10
+        isYouLike:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+    BlogCommentLike:
+      type: object
+      required: 
+        - user
+        - commentBlog
+        - createdAt
+        - updatedAt
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        CommentBlog:
+          $ref: '#/components/schemas/CommentBlog'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
