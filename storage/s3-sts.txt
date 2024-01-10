@@ -1,0 +1,57 @@
+package storage
+
+import (
+	"os"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/sts"
+)
+
+type StorageS3Struct struct {
+	StorageS3  *session.Session
+	BucketName string
+}
+
+func NewS3() (*StorageS3Struct, error) {
+	// Load AWS configuration from environment variables
+	region := os.Getenv("AWS_REGION")
+	bucket := os.Getenv("AWS_BUCKET")
+	roleArn := os.Getenv("AWS_ROLE_ARN")
+
+	// Create a new AWS session
+	s, err := session.NewSession(&aws.Config{
+		Region: aws.String(region),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	// Assume the role to get temporary security credentials
+	stsSvc := sts.New(s)
+	assumeRoleOutput, err := stsSvc.AssumeRole(&sts.AssumeRoleInput{
+		RoleArn:         aws.String(roleArn),
+		RoleSessionName: aws.String("session-name"), // Provide a unique session name
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	// Create a new session with the temporary security credentials
+	sWithTempCreds, err := session.NewSession(&aws.Config{
+		Region: aws.String(region),
+		Credentials: credentials.NewStaticCredentials(
+			*assumeRoleOutput.Credentials.AccessKeyId,
+			*assumeRoleOutput.Credentials.SecretAccessKey,
+			*assumeRoleOutput.Credentials.SessionToken),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &StorageS3Struct{
+		StorageS3:  sWithTempCreds,
+		BucketName: bucket,
+	}, nil
+}

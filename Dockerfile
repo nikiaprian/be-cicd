@@ -1,0 +1,10 @@
+# Gunakan base image Alpine dengan Go yang telah di-compile
+FROM golang:1.22rc1-alpine3.19
+
+# Set jalur kerja (working directory) ke direktori aplikasi
+WORKDIR /app    
+COPY . .
+RUN mv .env.example .env
+#RUN echo .env
+RUN apk --no-cache add nano
+CMD [ "go", "run", "main.go" ]
