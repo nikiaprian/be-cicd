@@ -10,7 +10,7 @@ import (
 
 func NewPostgreSQLDB() (*services.PostgreSQL, error) {
 	connectionString := fmt.Sprintf(
-		"host=18.237.44.51 port=5432 user=postgres password=nikiskripsi dbname=postgres sslmode=disable",
+		"host=34.211.113.235 port=5432 user=postgres password=nikiskripsi dbname=postgres sslmode=disable",
 	)
 
 	db, err := sql.Open("postgres", connectionString)
