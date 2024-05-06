@@ -22,14 +22,14 @@ jobs:
     - name: Push to Docker Hub
       run: docker push nikiaprian/backend:latest
 
-    - name: Deploy to EC2
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USERNAME }}
-        key: ${{ secrets.EC2_PRIVATE_KEY }}
-        script: |
-          sudo docker pull nikiaprian/backend:latest
-          sudo docker stop backend || true
-          sudo docker rm backend || true
-          sudo docker run -d --name backend -p 9090:9090 nikiaprian/backend:latest
+    # - name: Deploy to EC2
+    #   uses: appleboy/ssh-action@master
+    #   with:
+    #     host: ${{ secrets.EC2_HOST }}
+    #     username: ${{ secrets.EC2_USERNAME }}
+    #     key: ${{ secrets.EC2_PRIVATE_KEY }}
+    #     script: |
+    #       sudo docker pull nikiaprian/backend:latest
+    #       sudo docker stop backend || true
+    #       sudo docker rm backend || true
+    #       sudo docker run -d --name backend -p 9090:9090 nikiaprian/backend:latest
