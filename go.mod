@@ -13,6 +13,7 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.13
 	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3
 	golang.org/x/oauth2 v0.0.0-20220608161450-d0670ef3b1eb
+	github.com/stretchr/testify v1.7.0
 )
 
 require (
