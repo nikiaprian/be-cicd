@@ -104,7 +104,7 @@ func main() {
 	// Setup Server //
 	srv := &http.Server{
 		Handler: router,
-		Addr:    "docker-alb-be-520385363.us-west-2.elb.amazonaws.com:9090",
+		Addr:    ":9090",
 		// Good practice: enforce timeouts for servers you create!
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
