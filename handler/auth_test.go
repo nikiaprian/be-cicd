@@ -12,7 +12,11 @@ import (
 
 func setupRouter() *gin.Engine {
 	r := gin.Default()
-	// Inisialisasi handler yang diperlukan di sini
+
+	// Menyediakan handler yang benar
+	// Pastikan Anda menggunakan instance handler yang tepat
+	// Anda mungkin perlu menyesuaikan ini berdasarkan inisialisasi handler Anda
+	r.POST("/auth/login", UserLogin)
 	return r
 }
 
@@ -27,9 +31,7 @@ func TestUserLogin(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusOK, w.Code)
-	// Tambahkan assertion sesuai kebutuhan
 }
-
 
 // package handler
 
