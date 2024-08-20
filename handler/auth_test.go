@@ -7,35 +7,27 @@ import (
 	"testing"
 
 	"codein/project"
-	"codein/usecase"
-
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
 
-// MockUsecase adalah mock untuk usecase.Usecase
-type MockUsecase struct{}
+// MockHandler adalah mock untuk Handler
+type MockHandler struct{}
 
-func (m *MockUsecase) GetUserByToken(c *gin.Context, token string) (interface{}, error) {
-	if token == "valid_token" {
+func (m *MockHandler) GetUserByToken(c *gin.Context) (interface{}, error) {
+	token := c.GetHeader("Authorization")
+	if token == "Bearer valid_token" {
 		return struct{}{}, nil
 	}
 	return nil, errors.New("invalid token")
 }
 
-// MockProject menggantikan Project dengan mock Usecase
-func newMockProject() *project.Project {
-	return &project.Project{
-		Usecase: &usecase.Usecase{
-			// Gunakan mock Usecase di sini jika terdapat di usecase
-			GetUserByToken: (&MockUsecase{}).GetUserByToken,
-		},
-	}
-}
-
 func newMockHandler() *Handler {
 	return &Handler{
-		Project: newMockProject(),
+		Project: &project.Project{
+			// Jika perlu, masukkan mocking untuk Project dan Usecase di sini
+		},
+		GetUserByToken: (&MockHandler{}).GetUserByToken,
 	}
 }
 
@@ -66,7 +58,6 @@ func TestCheckToken(t *testing.T) {
 	r.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusOK, w.Code)
 }
-
 
 
 // package handler
