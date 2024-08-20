@@ -4,10 +4,8 @@ import (
 	"testing"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"codein/models"
 )
-
 
 func TestCreateBlog(t *testing.T) {
 	// Inisialisasi gin context
