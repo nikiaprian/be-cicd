@@ -1,26 +1,29 @@
 package repository
 
 import (
-	"context"
 	"testing"
+	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"codein/models"
 )
 
 func TestCreateBlog(t *testing.T) {
-	repo := NewRepository(nil) // Assume nil or mock DB for simplicity
+	// Inisialisasi repository (anggap db nil atau mock DB untuk kesederhanaan)
+	repo := NewRepository(nil)
 
-	// Simulate a context and blog request
-	ctx := context.TODO()
+	// Simulasi gin context dan blog request
+	ctx, _ := gin.CreateTestContext(nil)
 	blogReq := models.BlogRequest{
-		Title: "Test Blog",
+		Title:   "Test Blog",
 		Content: "This is a test blog content.",
 	}
-	userID := 1 // Assume an example user ID
-	blogID := 0 // Assume an example blog ID
+	userID := 1 // Asumsikan user ID contoh
 
-	err := repo.CreateBlog(ctx, blogReq, "Test Photo", userID)
+	// Panggil fungsi CreateBlog
+	blog, err := repo.CreateBlog(ctx, blogReq, "Test Photo", userID)
 
+	// Verifikasi hasil
 	assert.Nil(t, err)
-	assert.Equal(t, "Test Blog", blogReq.Title)
+	assert.NotNil(t, blog)
+	assert.Equal(t, "Test Blog", blog.Title)
 }
