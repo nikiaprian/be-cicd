@@ -23,7 +23,7 @@ func setupRouter() *gin.Engine {
 func TestUserLogin(t *testing.T) {
 	r := setupRouter()
 
-	reqBody := bytes.NewBufferString(`{"email": "test@example.com", "password": "password"}`)
+	reqBody := bytes.NewBufferString(`{"email": "test123@gmail.com", "password": "gameover213"}`)
 	req := httptest.NewRequest(http.MethodPost, "/auth/login", reqBody)
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
