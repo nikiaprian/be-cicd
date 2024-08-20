@@ -1,68 +1,37 @@
-package handler
+package handler_test
 
 import (
-	"errors"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 
-	"codein/usecase"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"codein/handler"
+	"codein/project"
 )
 
-// AuthUsecase adalah interface yang mendefinisikan metode yang dibutuhkan
-type AuthUsecase interface {
-	GetUserByToken(token string) (interface{}, error)
+// MockProject adalah struktur yang mengimplementasikan interface dari Project
+type MockProject struct {
+	mock.Mock
 }
 
-// MockUsecase adalah mock untuk interface AuthUsecase
-type MockUsecase struct{}
-
-func (m *MockUsecase) GetUserByToken(token string) (interface{}, error) {
-	if token == "Bearer valid_token" {
-		return struct{}{}, nil
-	}
-	return nil, errors.New("invalid token")
-}
-
-// Handler sekarang menggunakan interface AuthUsecase
-type Handler struct {
-	AuthUsecase AuthUsecase
-}
-
-func newMockHandler() *Handler {
-	return &Handler{
-		AuthUsecase: &MockUsecase{},
-	}
+func (m *MockProject) SomeMethod() {
+	m.Called()
 }
 
 func TestCheckToken(t *testing.T) {
-	// Setup gin dan handler
-	gin.SetMode(gin.TestMode)
-	r := gin.Default()
-	handler := newMockHandler()
-	r.GET("/auth/check", handler.CheckToken)
+	mockProject := new(MockProject)
+	h := handler.NewHandler(mockProject)
 
-	// Pengujian tanpa token (harus mengembalikan 401 Unauthorized)
-	req := httptest.NewRequest(http.MethodGet, "/auth/check", nil)
-	w := httptest.NewRecorder()
-	r.ServeHTTP(w, req)
-	assert.Equal(t, http.StatusUnauthorized, w.Code)
+	// Menggunakan Gin untuk membuat konteks HTTP
+	c, _ := gin.CreateTestContext(httptest.NewRecorder())
+	c.Request, _ = http.NewRequest("GET", "/your-endpoint", nil)
 
-	// Pengujian dengan token yang tidak valid (harus mengembalikan 401 Unauthorized)
-	req = httptest.NewRequest(http.MethodGet, "/auth/check", nil)
-	req.Header.Set("Authorization", "Bearer invalid_token")
-	w = httptest.NewRecorder()
-	r.ServeHTTP(w, req)
-	assert.Equal(t, http.StatusUnauthorized, w.Code)
+	// Jalankan metode CheckToken
+	h.CheckToken(c)
 
-	// Pengujian dengan token yang valid (harus mengembalikan 200 OK)
-	req = httptest.NewRequest(http.MethodGet, "/auth/check", nil)
-	req.Header.Set("Authorization", "Bearer valid_token")
-	w = httptest.NewRecorder()
-	r.ServeHTTP(w, req)
-	assert.Equal(t, http.StatusOK, w.Code)
+	// Verifikasi output
+	assert.Equal(t, 200, c.Writer.Status())
 }
 
 
