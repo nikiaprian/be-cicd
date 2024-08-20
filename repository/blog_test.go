@@ -8,11 +8,6 @@ import (
 	"codein/models"
 )
 
-// Mock method for CreateBlog
-func (m *MockRepository) CreateBlog(ctx *gin.Context, blogReq models.BlogRequest, photo string, userID int) (*models.Blog, error) {
-	args := m.Called(ctx, blogReq, photo, userID)
-	return args.Get(0).(*models.Blog), args.Error(1)
-}
 
 func TestCreateBlog(t *testing.T) {
 	// Inisialisasi gin context
