@@ -7,16 +7,16 @@ import (
     "codein/models"
 )
 
-func TestGetLikeByUserIDAndBlogID(t *testing.T) {
+func TestDeleteLikeByBlogId(t *testing.T) {
 	mockRepo := new(MockRepository)
 	ctx := gin.Context{}
 
 	// Siapkan ekspektasi pada mock
 	expectedLike := &models.BlogsLikesResponse{ID: 1, BlogID: 1}
-	mockRepo.On("GetLikeByUserIDAndBlogID", &ctx, 1, 1).Return(expectedLike, nil)
+	mockRepo.On("DeleteLikeByBlogId", &ctx, 1, 1).Return(expectedLike, nil)
 
 	// Panggil metode yang diuji
-	result, err := mockRepo.GetLikeByUserIDAndBlogID(&ctx, 1, 1)
+	result, err := mockRepo.DeleteLikeByBlogId(&ctx, 1, 1)
 
 	// Periksa hasil
 	assert.Nil(t, err)
