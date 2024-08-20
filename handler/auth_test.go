@@ -1,40 +1,45 @@
 package handler_test
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"codein/handler"
-	"codein/project"
+	"codein/usecase"
 )
 
-// MockProject adalah struktur yang mengimplementasikan interface dari Project
-type MockProject struct {
+// MockUsecase untuk mock fungsionalitas usecase
+type MockUsecase struct {
 	mock.Mock
 }
 
-func (m *MockProject) SomeMethod() {
-	m.Called()
+func (m *MockUsecase) GetUserByToken(c *gin.Context) (interface{}, error) {
+	args := m.Called(c)
+	return args.Get(0), args.Error(1)
 }
 
 func TestCheckToken(t *testing.T) {
-	mockProject := new(MockProject)
-	h := handler.NewHandler(mockProject)
+	mockUsecase := new(MockUsecase)
+	h := handler.NewHandler(mockUsecase)
 
-	// Menggunakan Gin untuk membuat konteks HTTP
+	// Setup test context
 	c, _ := gin.CreateTestContext(httptest.NewRecorder())
-	c.Request, _ = http.NewRequest("GET", "/your-endpoint", nil)
+	c.Request, _ = http.NewRequest(http.MethodGet, "/check-token", nil)
 
-	// Jalankan metode CheckToken
+	// Define behavior for mock
+	mockUsecase.On("GetUserByToken", c).Return(nil, nil) // Simulasi token valid
+
+	// Call CheckToken
 	h.CheckToken(c)
 
-	// Verifikasi output
-	assert.Equal(t, 200, c.Writer.Status())
+	// Assertions
+	assert.Equal(t, http.StatusOK, c.Writer.Status())
+	mockUsecase.AssertExpectations(t)
 }
-
-
 
 
 // package handler
