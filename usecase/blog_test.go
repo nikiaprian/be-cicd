@@ -7,7 +7,6 @@ import (
     "github.com/stretchr/testify/assert"
     "codein/models"
     "codein/repository"
-    "codein/tests"
 )
 
 type MockRepository struct {
