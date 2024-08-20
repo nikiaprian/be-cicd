@@ -44,6 +44,7 @@ func (handler *Handler) UserLogin(c *gin.Context) {
 
 	c.JSON(200, sendResponseSuccess{Success: true, Code: 200, Message: "", Data: data})
 	return
+	c.JSON(http.StatusOK, gin.H{"message": "User logged in"})
 }
 
 func (handler *Handler) UserRegister(c *gin.Context) {
