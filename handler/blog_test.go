@@ -7,12 +7,17 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
+	"codein/usecase" // import your usecase package
+	"codein/project" // import your project package
 )
 
 func TestGetAllBlog(t *testing.T) {
 	// Setup gin and handler
 	r := gin.Default()
-	handler := &Handler{} // Assumes Handler is properly initialized
+	usecase := &usecase.BlogUsecase{} // Assuming you have a valid BlogUsecase
+	project := &project.Project{Usecase: usecase}
+	handler := &Handler{Project: project} // Initialize Handler with Project
+
 	r.GET("/blogs", handler.GetAllBlog)
 
 	// Test GetAllBlog (should return 200 OK)
