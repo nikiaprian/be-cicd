@@ -8,11 +8,6 @@ import (
 	"codein/models"
 )
 
-// MockRepository is a mock type for the Repository type
-type MockRepository struct {
-	mock.Mock
-}
-
 // Mock method for CreateBlog
 func (m *MockRepository) CreateBlog(ctx *gin.Context, blogReq models.BlogRequest, photo string, userID int) (*models.Blog, error) {
 	args := m.Called(ctx, blogReq, photo, userID)
