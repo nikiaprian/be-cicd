@@ -11,23 +11,22 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// MockHandler adalah mock untuk Handler
-type MockHandler struct{}
+// MockUsecase adalah mock untuk struct Usecase
+type MockUsecase struct{}
 
-func (m *MockHandler) GetUserByToken(c *gin.Context) (interface{}, error) {
-	token := c.GetHeader("Authorization")
+func (m *MockUsecase) GetUserByToken(token string) (interface{}, error) {
 	if token == "Bearer valid_token" {
 		return struct{}{}, nil
 	}
 	return nil, errors.New("invalid token")
 }
 
+// newMockHandler menginisialisasi Handler dengan mock Project
 func newMockHandler() *Handler {
 	return &Handler{
 		Project: &project.Project{
-			// Jika perlu, masukkan mocking untuk Project dan Usecase di sini
+			Usecase: &MockUsecase{},
 		},
-		GetUserByToken: (&MockHandler{}).GetUserByToken,
 	}
 }
 
@@ -58,6 +57,7 @@ func TestCheckToken(t *testing.T) {
 	r.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusOK, w.Code)
 }
+
 
 
 // package handler
