@@ -6,11 +6,14 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"codein/project"
+	"codein/usecase"
+
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
 
-// Mock dependencies for Handler
+// MockUsecase untuk menggantikan Usecase asli
 type MockUsecase struct{}
 
 func (m *MockUsecase) GetUserByToken(c *gin.Context, token string) (interface{}, error) {
@@ -20,45 +23,50 @@ func (m *MockUsecase) GetUserByToken(c *gin.Context, token string) (interface{},
 	return nil, errors.New("invalid token")
 }
 
-type MockProject struct {
-	Usecase *MockUsecase
-}
-
-func newMockHandler() *Handler {
-	return &Handler{
-		Project: &MockProject{
-			Usecase: &MockUsecase{},
+// MockProject menggantikan Project dengan mock Usecase
+func newMockProject() *project.Project {
+	return &project.Project{
+		Usecase: &usecase.Usecase{
+			// Gunakan mock Usecase di sini
+			Auth: &MockUsecase{},
 		},
 	}
 }
 
+func newMockHandler() *Handler {
+	return &Handler{
+		Project: newMockProject(),
+	}
+}
+
 func TestCheckToken(t *testing.T) {
-	// Setup gin and handler
+	// Setup gin dan handler
 	gin.SetMode(gin.TestMode)
 	r := gin.Default()
 	handler := newMockHandler()
 	r.GET("/auth/check", handler.CheckToken)
 
-	// Test without token (should return 401 Unauthorized)
+	// Pengujian tanpa token (harus mengembalikan 401 Unauthorized)
 	req := httptest.NewRequest(http.MethodGet, "/auth/check", nil)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusUnauthorized, w.Code)
 
-	// Test with invalid token (should return 401 Unauthorized)
+	// Pengujian dengan token yang tidak valid (harus mengembalikan 401 Unauthorized)
 	req = httptest.NewRequest(http.MethodGet, "/auth/check", nil)
 	req.Header.Set("Authorization", "Bearer invalid_token")
 	w = httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusUnauthorized, w.Code)
 
-	// Test with valid token (should return 200 OK)
+	// Pengujian dengan token yang valid (harus mengembalikan 200 OK)
 	req = httptest.NewRequest(http.MethodGet, "/auth/check", nil)
 	req.Header.Set("Authorization", "Bearer valid_token")
 	w = httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusOK, w.Code)
 }
+
 
 
 // package handler
