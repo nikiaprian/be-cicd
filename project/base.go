@@ -13,7 +13,3 @@ type Project struct {
 func NewProject(usecase *usecase.Usecase, sto storage.StorageS3Stuct) *Project {
 	return &Project{Usecase: usecase, Storage: &sto}
 }
-
-type StorageInterface interface {
-    // Tambahkan metode yang diperlukan untuk storage
-}

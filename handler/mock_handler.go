@@ -2,7 +2,6 @@ package handler
 
 import (
     "github.com/gin-gonic/gin"
-    "codein/models"
 )
 
 // MockUsecase untuk menggantikan Usecase asli
