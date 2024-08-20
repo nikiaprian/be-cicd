@@ -6,12 +6,17 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"codein/project"
+	"codein/usecase"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
 
-// MockUsecase adalah mock untuk struct Usecase
+// AuthUsecase adalah interface yang mendefinisikan metode yang dibutuhkan
+type AuthUsecase interface {
+	GetUserByToken(token string) (interface{}, error)
+}
+
+// MockUsecase adalah mock untuk interface AuthUsecase
 type MockUsecase struct{}
 
 func (m *MockUsecase) GetUserByToken(token string) (interface{}, error) {
@@ -21,12 +26,14 @@ func (m *MockUsecase) GetUserByToken(token string) (interface{}, error) {
 	return nil, errors.New("invalid token")
 }
 
-// newMockHandler menginisialisasi Handler dengan mock Project
+// Handler sekarang menggunakan interface AuthUsecase
+type Handler struct {
+	AuthUsecase AuthUsecase
+}
+
 func newMockHandler() *Handler {
 	return &Handler{
-		Project: &project.Project{
-			Usecase: &MockUsecase{},
-		},
+		AuthUsecase: &MockUsecase{},
 	}
 }
 
@@ -57,6 +64,7 @@ func TestCheckToken(t *testing.T) {
 	r.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusOK, w.Code)
 }
+
 
 
 
