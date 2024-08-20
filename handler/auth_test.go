@@ -1,22 +1,19 @@
-package handler
+package handler_test
 
 import (
-    "errors"
     "net/http"
     "net/http/httptest"
     "testing"
 
     "github.com/gin-gonic/gin"
     "github.com/stretchr/testify/assert"
+    "codein/handler" // Pastikan ini mengarah ke paket handler Anda
 )
 
-// Mock implementation of GetUserByToken for testing
-func (handler *Handler) GetUserByToken(c *gin.Context) (interface{}, error) {
-    token := c.GetHeader("Authorization")
-    if token == "valid-token" {
-        return &User{}, nil // Assuming User is a struct representing a user
-    }
-    return nil, errors.New("invalid token")
+// Definisikan struktur User jika belum ada
+type User struct {
+    ID   int
+    Name string
 }
 
 // Test the CheckToken function
@@ -35,7 +32,7 @@ func TestCheckToken(t *testing.T) {
     for _, tt := range tests {
         // Create a new gin engine and handler for each test
         r := gin.New()
-        handler := &Handler{}
+        handler := &handler.Handler{} // Menggunakan struct Handler yang sudah ada
         r.GET("/check", handler.CheckToken)
 
         // Create a new HTTP request
