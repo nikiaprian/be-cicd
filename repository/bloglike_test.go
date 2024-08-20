@@ -1,45 +1,28 @@
 package repository
 
 import (
-	"testing"
-	"github.com/gin-gonic/gin"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"codein/models"
+    "testing"
+    "github.com/gin-gonic/gin"
+    "github.com/stretchr/testify/assert"
+    "github.com/stretchr/testify/mock"
+    "codein/models"
 )
 
-// Gunakan MockRepository yang diimport dari file lain
-
 func TestCreateLikeByBlogId(t *testing.T) {
-	// Inisialisasi gin context
-	ctx, _ := gin.CreateTestContext(nil)
+    mockRepo := new(MockRepository)
+    ctx := gin.Context{}
 
-	// Inisialisasi MockRepository
-	mockRepo := new(MockRepository)
+    // Siapkan ekspektasi pada mock
+    mockRepo.On("CreateLikeByBlogId", &ctx, 1, 1).Return(&models.BlogsLikesResponse{ID: 1, BlogID: 1}, nil)
 
-	// Setup ekspektasi
-	userID := 1
-	blogID := 1
-	expectedBlogLike := &models.BlogsLikesResponse{
-		ID:     1,
-		BlogID: blogID,
-		User: models.User{
-			ID: userID,
-		},
-	}
+    // Panggil metode yang diuji
+    result, err := mockRepo.CreateLikeByBlogId(&ctx, 1, 1)
 
-	// Set ekspektasi return value dari method yang di-mock
-	mockRepo.On("CreateLikeByBlogId", ctx, userID, blogID).Return(expectedBlogLike, nil)
+    // Periksa hasil
+    assert.Nil(t, err)
+    assert.NotNil(t, result)
+    assert.Equal(t, 1, result.ID)
 
-	// Panggil method yang di-mock
-	blogLike, err := mockRepo.CreateLikeByBlogId(ctx, userID, blogID)
-
-	// Verifikasi hasil
-	assert.Nil(t, err)
-	assert.NotNil(t, blogLike)
-	assert.Equal(t, expectedBlogLike.ID, blogLike.ID)
-	assert.Equal(t, expectedBlogLike.BlogID, blogLike.BlogID)
-
-	// Verifikasi bahwa ekspektasi terpenuhi
-	mockRepo.AssertExpectations(t)
+    // Verifikasi bahwa ekspektasi terpenuhi
+    mockRepo.AssertExpectations(t)
 }
