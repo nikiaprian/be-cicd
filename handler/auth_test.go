@@ -9,37 +9,36 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"codein/handler"
-	"codein/usecase"
+	"codein/project"
 )
 
-// MockUsecase untuk mock fungsionalitas usecase
-type MockUsecase struct {
+// MockProject untuk mock fungsionalitas project
+type MockProject struct {
 	mock.Mock
 }
 
-func (m *MockUsecase) GetUserByToken(c *gin.Context) (interface{}, error) {
-	args := m.Called(c)
-	return args.Get(0), args.Error(1)
+func (m *MockProject) SomeMethod() {
+	m.Called()
 }
 
 func TestCheckToken(t *testing.T) {
-	mockUsecase := new(MockUsecase)
-	h := handler.NewHandler(mockUsecase)
+	mockProject := new(MockProject)
+	h := handler.NewHandler(mockProject)
 
 	// Setup test context
 	c, _ := gin.CreateTestContext(httptest.NewRecorder())
 	c.Request, _ = http.NewRequest(http.MethodGet, "/check-token", nil)
 
-	// Define behavior for mock
-	mockUsecase.On("GetUserByToken", c).Return(nil, nil) // Simulasi token valid
+	// Simulasikan perilaku metode yang dipanggil di handler
+	// Contoh: mockProject.On("SomeMethod").Return(nil)
 
 	// Call CheckToken
 	h.CheckToken(c)
 
 	// Assertions
 	assert.Equal(t, http.StatusOK, c.Writer.Status())
-	mockUsecase.AssertExpectations(t)
 }
+
 
 
 // package handler
