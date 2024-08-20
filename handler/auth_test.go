@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -9,15 +10,45 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// Mock dependencies for Handler
+type MockUsecase struct{}
+
+func (m *MockUsecase) GetUserByToken(c *gin.Context, token string) (interface{}, error) {
+	if token == "valid_token" {
+		return struct{}{}, nil
+	}
+	return nil, errors.New("invalid token")
+}
+
+type MockProject struct {
+	Usecase *MockUsecase
+}
+
+func newMockHandler() *Handler {
+	return &Handler{
+		Project: &MockProject{
+			Usecase: &MockUsecase{},
+		},
+	}
+}
+
 func TestCheckToken(t *testing.T) {
 	// Setup gin and handler
+	gin.SetMode(gin.TestMode)
 	r := gin.Default()
-	handler := &Handler{} // Assumes Handler is properly initialized
+	handler := newMockHandler()
 	r.GET("/auth/check", handler.CheckToken)
 
 	// Test without token (should return 401 Unauthorized)
 	req := httptest.NewRequest(http.MethodGet, "/auth/check", nil)
 	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
+
+	// Test with invalid token (should return 401 Unauthorized)
+	req = httptest.NewRequest(http.MethodGet, "/auth/check", nil)
+	req.Header.Set("Authorization", "Bearer invalid_token")
+	w = httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusUnauthorized, w.Code)
 
