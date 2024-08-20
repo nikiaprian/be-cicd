@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"bytes"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -12,26 +11,62 @@ import (
 
 func setupRouter() *gin.Engine {
 	r := gin.Default()
-
-	// Menyediakan handler yang benar
-	// Pastikan Anda menggunakan instance handler yang tepat
-	// Anda mungkin perlu menyesuaikan ini berdasarkan inisialisasi handler Anda
-	r.POST("/auth/login", UserLogin)
+	handler := &Handler{}
+	r.GET("/auth/check", handler.CheckToken)
 	return r
 }
 
-func TestUserLogin(t *testing.T) {
+func TestCheckToken(t *testing.T) {
 	r := setupRouter()
 
-	reqBody := bytes.NewBufferString(`{"email": "test123@gmail.com", "password": "gameover213"}`)
-	req := httptest.NewRequest(http.MethodPost, "/auth/login", reqBody)
-	req.Header.Set("Content-Type", "application/json")
+	// Simulasi request tanpa token (seharusnya gagal)
+	req := httptest.NewRequest(http.MethodGet, "/auth/check", nil)
 	w := httptest.NewRecorder()
-
 	r.ServeHTTP(w, req)
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
 
+	// Simulasi request dengan token yang valid (seharusnya sukses)
+	req = httptest.NewRequest(http.MethodGet, "/auth/check", nil)
+	req.Header.Set("Authorization", "Bearer valid_token")
+	w = httptest.NewRecorder()
+	r.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusOK, w.Code)
 }
+package handler
+
+import (
+	"net/http"
+	"net/http/httptest"
+	"testing"
+
+	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
+)
+
+func setupRouter() *gin.Engine {
+	r := gin.Default()
+	handler := &Handler{}
+	r.GET("/auth/check", handler.CheckToken)
+	return r
+}
+
+func TestCheckToken(t *testing.T) {
+	r := setupRouter()
+
+	// Simulasi request tanpa token (seharusnya gagal)
+	req := httptest.NewRequest(http.MethodGet, "/auth/check", nil)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
+
+	// Simulasi request dengan token yang valid (seharusnya sukses)
+	req = httptest.NewRequest(http.MethodGet, "/auth/check", nil)
+	req.Header.Set("Authorization", "Bearer valid_token")
+	w = httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	assert.Equal(t, http.StatusOK, w.Code)
+}
+
 
 // package handler
 
