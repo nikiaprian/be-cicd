@@ -8,16 +8,7 @@ import (
 	"codein/models"
 )
 
-// MockRepository adalah tipe mock untuk tipe Repository
-type MockRepository struct {
-	mock.Mock
-}
-
-// Mock method untuk CreateLikeByBlogId
-func (m *MockRepository) CreateLikeByBlogId(ctx *gin.Context, user_id, blog_id int) (*models.BlogsLikesResponse, error) {
-	args := m.Called(ctx, user_id, blog_id)
-	return args.Get(0).(*models.BlogsLikesResponse), args.Error(1)
-}
+// Gunakan MockRepository yang diimport dari file lain
 
 func TestCreateLikeByBlogId(t *testing.T) {
 	// Inisialisasi gin context
