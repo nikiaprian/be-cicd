@@ -1,14 +1,3 @@
-package handler
-
-import (
-    "net/http"
-    "net/http/httptest"
-    "testing"
-
-    "github.com/gin-gonic/gin"
-    "github.com/stretchr/testify/assert"
-)
-
 func TestGetAllBlog(t *testing.T) {
     gin.SetMode(gin.TestMode)
 
@@ -18,10 +7,11 @@ func TestGetAllBlog(t *testing.T) {
     // Inisialisasi Mock
     mockProject := &MockProject{
         Usecase: &MockUsecase{},
+        Storage: &MockStorage{}, // Inisialisasi dengan MockStorage
     }
 
     // Inisialisasi handler
-    blogHandler := NewHandler(mockProject)
+    blogHandler := NewHandler(mockProject) // Pastikan mockProject sesuai tipe yang diterima
 
     // Panggil fungsi
     blogHandler.GetAllBlog(c)
@@ -39,10 +29,11 @@ func TestCreateBlog(t *testing.T) {
     // Inisialisasi Mock
     mockProject := &MockProject{
         Usecase: &MockUsecase{},
+        Storage: &MockStorage{}, // Inisialisasi dengan MockStorage
     }
 
     // Inisialisasi handler
-    blogHandler := NewHandler(mockProject)
+    blogHandler := NewHandler(mockProject) // Pastikan mockProject sesuai tipe yang diterima
 
     // Simulasi input
     c.Request, _ = http.NewRequest(http.MethodPost, "/blogs", nil)

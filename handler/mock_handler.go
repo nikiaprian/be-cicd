@@ -3,6 +3,7 @@ package handler
 import (
     "github.com/gin-gonic/gin"
     "codein/models"
+    "codein/project"
 )
 
 // MockUsecase untuk menggantikan Usecase asli
@@ -15,13 +16,18 @@ func (m *MockUsecase) GetAllBlog(c *gin.Context) ([]models.Blog, error) {
     }, nil
 }
 
+// MockStorage untuk menggantikan Storage asli
+type MockStorage struct{}
+
+// Implementasikan metode yang diperlukan untuk StorageInterface
+func (m *MockStorage) SomeMethod() {
+    // Implementasi metode sesuai kebutuhan
+}
+
 // MockProject untuk menggantikan Project asli
 type MockProject struct {
     Usecase *MockUsecase
-    Storage StorageInterface // Pastikan ini sesuai dengan definisi StorageInterface Anda
+    Storage *MockStorage // Menggunakan MockStorage yang sesuai
 }
 
-// Jika Anda belum mendefinisikan StorageInterface, lakukan seperti ini:
-type StorageInterface interface {
-    // Tambahkan metode yang diperlukan untuk storage
-}
+// Pastikan MockProject memiliki semua metode yang diperlukan
