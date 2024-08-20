@@ -9,57 +9,19 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func setupRouter() *gin.Engine {
-	r := gin.Default()
-	handler := &Handler{}
-	r.GET("/auth/check", handler.CheckToken)
-	return r
-}
-
 func TestCheckToken(t *testing.T) {
-	r := setupRouter()
+	// Setup gin and handler
+	r := gin.Default()
+	handler := &Handler{} // Assumes Handler is properly initialized
+	r.GET("/auth/check", handler.CheckToken)
 
-	// Simulasi request tanpa token (seharusnya gagal)
+	// Test without token (should return 401 Unauthorized)
 	req := httptest.NewRequest(http.MethodGet, "/auth/check", nil)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusUnauthorized, w.Code)
 
-	// Simulasi request dengan token yang valid (seharusnya sukses)
-	req = httptest.NewRequest(http.MethodGet, "/auth/check", nil)
-	req.Header.Set("Authorization", "Bearer valid_token")
-	w = httptest.NewRecorder()
-	r.ServeHTTP(w, req)
-	assert.Equal(t, http.StatusOK, w.Code)
-}
-package handler
-
-import (
-	"net/http"
-	"net/http/httptest"
-	"testing"
-
-	"github.com/gin-gonic/gin"
-	"github.com/stretchr/testify/assert"
-)
-
-func setupRouter() *gin.Engine {
-	r := gin.Default()
-	handler := &Handler{}
-	r.GET("/auth/check", handler.CheckToken)
-	return r
-}
-
-func TestCheckToken(t *testing.T) {
-	r := setupRouter()
-
-	// Simulasi request tanpa token (seharusnya gagal)
-	req := httptest.NewRequest(http.MethodGet, "/auth/check", nil)
-	w := httptest.NewRecorder()
-	r.ServeHTTP(w, req)
-	assert.Equal(t, http.StatusUnauthorized, w.Code)
-
-	// Simulasi request dengan token yang valid (seharusnya sukses)
+	// Test with valid token (should return 200 OK)
 	req = httptest.NewRequest(http.MethodGet, "/auth/check", nil)
 	req.Header.Set("Authorization", "Bearer valid_token")
 	w = httptest.NewRecorder()
