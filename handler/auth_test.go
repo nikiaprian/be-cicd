@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// MockUsecase untuk menggantikan Usecase asli
+// MockUsecase adalah mock untuk usecase.Usecase
 type MockUsecase struct{}
 
 func (m *MockUsecase) GetUserByToken(c *gin.Context, token string) (interface{}, error) {
@@ -27,8 +27,8 @@ func (m *MockUsecase) GetUserByToken(c *gin.Context, token string) (interface{},
 func newMockProject() *project.Project {
 	return &project.Project{
 		Usecase: &usecase.Usecase{
-			// Gunakan mock Usecase di sini
-			Auth: &MockUsecase{},
+			// Gunakan mock Usecase di sini jika terdapat di usecase
+			GetUserByToken: (&MockUsecase{}).GetUserByToken,
 		},
 	}
 }
