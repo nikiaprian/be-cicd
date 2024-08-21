@@ -68,3 +68,19 @@ func (m *MockRepository) DeleteLikeByForumCommentId(forumCommentID int, userID i
 	args := m.Called(forumCommentID, userID)
 	return args.Error(0)
 }
+
+// untukforumlike
+func (m *MockRepository) CreateLikeByForumId(like models.ForumLikes) error {
+    args := m.Called(like)
+    return args.Error(0)
+}
+
+func (m *MockRepository) GetAllLikeByForumID(forumID int64) ([]models.ForumLikesResponse, error) {
+    args := m.Called(forumID)
+    return args.Get(0).([]models.ForumLikesResponse), args.Error(1)
+}
+
+func (m *MockRepository) DeleteLikeByForumId(likeID int64) error {
+    args := m.Called(likeID)
+    return args.Error(0)
+}
