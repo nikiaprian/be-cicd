@@ -12,15 +12,18 @@ func TestCreateLikeByForumId(t *testing.T) {
 	ctx := gin.Context{}
 
 	// Siapkan ekspektasi pada mock
-	mockRepo.On("CreateLikeByForumId", &ctx, 1, 1).Return(&models.ForumLikesResponse{ID: 1, ForumID: 1}, nil)
+	like := models.ForumsLikes{
+		ID:    1,
+		User:  models.User{ID: 1},
+		Forum: models.Forum{ID: 1},
+	}
+	mockRepo.On("CreateLikeByForumId", like).Return(nil)
 
 	// Panggil metode yang diuji
-	result, err := mockRepo.CreateLikeByForumId(&ctx, 1, 1)
+	err := mockRepo.CreateLikeByForumId(like)
 
 	// Periksa hasil
 	assert.Nil(t, err)
-	assert.NotNil(t, result)
-	assert.Equal(t, 1, result.ID)
 
 	// Verifikasi bahwa ekspektasi terpenuhi
 	mockRepo.AssertExpectations(t)
@@ -31,19 +34,19 @@ func TestGetAllLikeByForumID(t *testing.T) {
 	ctx := gin.Context{}
 
 	// Siapkan ekspektasi pada mock
-	expectedLikes := []models.ForumLikesResponse{
+	expectedLikes := []models.ForumsLikesResponse{
 		{ID: 1, ForumID: 1},
 		{ID: 2, ForumID: 1},
 	}
-	mockRepo.On("GetAllLikeByForumID", &ctx, 1).Return(&expectedLikes, nil)
+	mockRepo.On("GetAllLikeByForumID", int64(1)).Return(expectedLikes, nil)
 
 	// Panggil metode yang diuji
-	result, err := mockRepo.GetAllLikeByForumID(&ctx, 1)
+	result, err := mockRepo.GetAllLikeByForumID(1)
 
 	// Periksa hasil
 	assert.Nil(t, err)
 	assert.NotNil(t, result)
-	assert.Equal(t, 2, len(*result))
+	assert.Equal(t, 2, len(result))
 
 	// Verifikasi bahwa ekspektasi terpenuhi
 	mockRepo.AssertExpectations(t)
@@ -54,16 +57,13 @@ func TestDeleteLikeByForumId(t *testing.T) {
 	ctx := gin.Context{}
 
 	// Siapkan ekspektasi pada mock
-	expectedLike := &models.ForumLikesResponse{ID: 1, ForumID: 1}
-	mockRepo.On("DeleteLikeByForumId", &ctx, 1, 1).Return(expectedLike, nil)
+	mockRepo.On("DeleteLikeByForumId", int64(1)).Return(nil)
 
 	// Panggil metode yang diuji
-	result, err := mockRepo.DeleteLikeByForumId(&ctx, 1, 1)
+	err := mockRepo.DeleteLikeByForumId(1)
 
 	// Periksa hasil
 	assert.Nil(t, err)
-	assert.NotNil(t, result)
-	assert.Equal(t, 1, result.ID)
 
 	// Verifikasi bahwa ekspektasi terpenuhi
 	mockRepo.AssertExpectations(t)
