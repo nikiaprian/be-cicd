@@ -9,21 +9,6 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func (m *MockRepository) CreateLikeByForumCommentId(like *models.ForumCommentLikes) error {
-	args := m.Called(like)
-	return args.Error(0)
-}
-
-func (m *MockRepository) GetAllLikeByForumCommentID(forumCommentID int) ([]models.ForumCommentLikesResponse, error) {
-	args := m.Called(forumCommentID)
-	return args.Get(0).([]models.ForumCommentLikesResponse), args.Error(1)
-}
-
-func (m *MockRepository) DeleteLikeByForumCommentId(forumCommentID int, userID int) error {
-	args := m.Called(forumCommentID, userID)
-	return args.Error(0)
-}
-
 func TestCreateLikeByForumCommentId(t *testing.T) {
 	mockRepo := new(MockRepository)
 	like := &models.ForumCommentLikes{

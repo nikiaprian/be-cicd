@@ -6,23 +6,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 )
-
-func (m *MockRepository) CreateLikeByBlogCommentId(like *models.BlogCommentLikes) error {
-	args := m.Called(like)
-	return args.Error(0)
-}
-
-func (m *MockRepository) GetAllLikeByBlogCommentID(blogCommentID int) ([]models.BlogCommentLikesResponse, error) {
-	args := m.Called(blogCommentID)
-	return args.Get(0).([]models.BlogCommentLikesResponse), args.Error(1)
-}
-
-func (m *MockRepository) DeleteLikeByBlogCommentId(blogCommentID int, userID int) error {
-	args := m.Called(blogCommentID, userID)
-	return args.Error(0)
-}
 
 func TestCreateLikeByBlogCommentId(t *testing.T) {
 	mockRepo := new(MockRepository)
