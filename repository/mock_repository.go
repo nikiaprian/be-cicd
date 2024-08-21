@@ -36,3 +36,35 @@ func (m *MockRepository) DeleteLikeByBlogId(ctx *gin.Context, user_id, blog_id i
 }
 
 // Tambahkan method lainnya sesuai kebutuhan pengujian
+
+// Metode untuk BlogCommentLike
+func (m *MockRepository) CreateLikeByBlogCommentId(ctx *gin.Context, blogCommentId int, userId int) (*models.BlogCommentLikeResponse, error) {
+	args := m.Called(ctx, blogCommentId, userId)
+	return args.Get(0).(*models.BlogCommentLikeResponse), args.Error(1)
+}
+
+func (m *MockRepository) GetAllLikeByBlogCommentID(ctx *gin.Context, blogCommentId int) (*[]models.BlogCommentLikeResponse, error) {
+	args := m.Called(ctx, blogCommentId)
+	return args.Get(0).(*[]models.BlogCommentLikeResponse), args.Error(1)
+}
+
+func (m *MockRepository) DeleteLikeByBlogCommentId(ctx *gin.Context, blogCommentId int, userId int) (*models.BlogCommentLikeResponse, error) {
+	args := m.Called(ctx, blogCommentId, userId)
+	return args.Get(0).(*models.BlogCommentLikeResponse), args.Error(1)
+}
+
+// Metode untuk ForumCommentLike
+func (m *MockRepository) CreateLikeByForumCommentId(ctx *gin.Context, forumCommentId int, userId int) (*models.ForumCommentLikeResponse, error) {
+	args := m.Called(ctx, forumCommentId, userId)
+	return args.Get(0).(*models.ForumCommentLikeResponse), args.Error(1)
+}
+
+func (m *MockRepository) GetAllLikeByForumCommentID(ctx *gin.Context, forumCommentId int) (*[]models.ForumCommentLikeResponse, error) {
+	args := m.Called(ctx, forumCommentId)
+	return args.Get(0).(*[]models.ForumCommentLikeResponse), args.Error(1)
+}
+
+func (m *MockRepository) DeleteLikeByForumCommentId(ctx *gin.Context, forumCommentId int, userId int) (*models.ForumCommentLikeResponse, error) {
+	args := m.Called(ctx, forumCommentId, userId)
+	return args.Get(0).(*models.ForumCommentLikeResponse), args.Error(1)
+}
