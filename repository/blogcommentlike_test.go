@@ -9,10 +9,6 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-type MockRepository struct {
-	mock.Mock
-}
-
 func (m *MockRepository) CreateLikeByBlogCommentId(like *models.BlogCommentLikes) error {
 	args := m.Called(like)
 	return args.Error(0)
