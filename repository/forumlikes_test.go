@@ -9,7 +9,6 @@ import (
 
 func TestCreateLikeByForumId(t *testing.T) {
 	mockRepo := new(MockRepository)
-	ctx := gin.Context{}
 
 	// Siapkan ekspektasi pada mock
 	like := models.ForumsLikes{
@@ -31,7 +30,6 @@ func TestCreateLikeByForumId(t *testing.T) {
 
 func TestGetAllLikeByForumID(t *testing.T) {
 	mockRepo := new(MockRepository)
-	ctx := gin.Context{}
 
 	// Siapkan ekspektasi pada mock
 	expectedLikes := []models.ForumsLikesResponse{
@@ -54,7 +52,6 @@ func TestGetAllLikeByForumID(t *testing.T) {
 
 func TestDeleteLikeByForumId(t *testing.T) {
 	mockRepo := new(MockRepository)
-	ctx := gin.Context{}
 
 	// Siapkan ekspektasi pada mock
 	mockRepo.On("DeleteLikeByForumId", int64(1)).Return(nil)
