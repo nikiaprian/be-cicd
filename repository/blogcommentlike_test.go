@@ -1,71 +1,85 @@
 package repository
 
 import (
+	"codein/models"
 	"testing"
-	"github.com/gin-gonic/gin"
+	"time"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"codein/models"
 )
+
+type MockRepository struct {
+	mock.Mock
+}
+
+func (m *MockRepository) CreateLikeByBlogCommentId(like *models.BlogCommentLikes) error {
+	args := m.Called(like)
+	return args.Error(0)
+}
+
+func (m *MockRepository) GetAllLikeByBlogCommentID(blogCommentID int) ([]models.BlogCommentLikesResponse, error) {
+	args := m.Called(blogCommentID)
+	return args.Get(0).([]models.BlogCommentLikesResponse), args.Error(1)
+}
+
+func (m *MockRepository) DeleteLikeByBlogCommentId(blogCommentID int, userID int) error {
+	args := m.Called(blogCommentID, userID)
+	return args.Error(0)
+}
 
 func TestCreateLikeByBlogCommentId(t *testing.T) {
 	mockRepo := new(MockRepository)
-	ctx := gin.Context{}
+	like := &models.BlogCommentLikes{
+		ID: 1,
+		User: models.User{
+			ID: 1,
+		},
+		CommentBlog: models.CommentBlog{
+			ID: 1,
+		},
+		CreatedAt: new(time.Time),
+		UpdatedAt: new(time.Time),
+	}
 
-	// Siapkan ekspektasi pada mock
-	mockRepo.On("CreateLikeByBlogCommentId", &ctx, 1, 1).Return(&models.BlogCommentLikeResponse{ID: 1, BlogCommentID: 1}, nil)
+	mockRepo.On("CreateLikeByBlogCommentId", like).Return(nil)
 
-	// Panggil metode yang diuji
-	result, err := mockRepo.CreateLikeByBlogCommentId(&ctx, 1, 1)
-
-	// Periksa hasil
-	assert.Nil(t, err)
-	assert.NotNil(t, result)
-	assert.Equal(t, 1, result.ID)
-
-	// Verifikasi bahwa ekspektasi terpenuhi
+	err := mockRepo.CreateLikeByBlogCommentId(like)
+	assert.NoError(t, err)
 	mockRepo.AssertExpectations(t)
 }
 
 func TestGetAllLikeByBlogCommentID(t *testing.T) {
 	mockRepo := new(MockRepository)
-	ctx := gin.Context{}
-
-	// Siapkan ekspektasi pada mock
-	expectedLikes := []models.BlogCommentLikeResponse{
-		{ID: 1, BlogCommentID: 1},
-		{ID: 2, BlogCommentID: 1},
+	blogCommentID := 1
+	likes := []models.BlogCommentLikesResponse{
+		{
+			ID:            1,
+			BlogCommentID: 1,
+			User: models.User{
+				ID: 1,
+			},
+			CreatedAt: new(time.Time),
+			UpdatedAt: new(time.Time),
+		},
 	}
-	mockRepo.On("GetAllLikeByBlogCommentID", &ctx, 1).Return(&expectedLikes, nil)
 
-	// Panggil metode yang diuji
-	result, err := mockRepo.GetAllLikeByBlogCommentID(&ctx, 1)
+	mockRepo.On("GetAllLikeByBlogCommentID", blogCommentID).Return(likes, nil)
 
-	// Periksa hasil
-	assert.Nil(t, err)
-	assert.NotNil(t, result)
-	assert.Equal(t, 2, len(*result))
-
-	// Verifikasi bahwa ekspektasi terpenuhi
+	result, err := mockRepo.GetAllLikeByBlogCommentID(blogCommentID)
+	assert.NoError(t, err)
+	assert.Equal(t, likes, result)
 	mockRepo.AssertExpectations(t)
 }
 
 func TestDeleteLikeByBlogCommentId(t *testing.T) {
 	mockRepo := new(MockRepository)
-	ctx := gin.Context{}
+	blogCommentID := 1
+	userID := 1
 
-	// Siapkan ekspektasi pada mock
-	expectedLike := &models.BlogCommentLikeResponse{ID: 1, BlogCommentID: 1}
-	mockRepo.On("DeleteLikeByBlogCommentId", &ctx, 1, 1).Return(expectedLike, nil)
+	mockRepo.On("DeleteLikeByBlogCommentId", blogCommentID, userID).Return(nil)
 
-	// Panggil metode yang diuji
-	result, err := mockRepo.DeleteLikeByBlogCommentId(&ctx, 1, 1)
-
-	// Periksa hasil
-	assert.Nil(t, err)
-	assert.NotNil(t, result)
-	assert.Equal(t, 1, result.ID)
-
-	// Verifikasi bahwa ekspektasi terpenuhi
+	err := mockRepo.DeleteLikeByBlogCommentId(blogCommentID, userID)
+	assert.NoError(t, err)
 	mockRepo.AssertExpectations(t)
 }
