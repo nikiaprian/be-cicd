@@ -24,6 +24,15 @@ jobs:
     - name: Run Tests
       run: go test -v ./...
 
+    - name: Generate .env file from secrets
+        run: |
+          cat <<EOF > .env
+          AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}
+          AWS_REGION=${{ secrets.AWS_REGION }}
+          AWS_BUCKET=${{ secrets.AWS_BUCKET }}
+          EOF
+
     - name: Build Docker Image
       run: docker build -t nikiaprian/backend:latest .
 
