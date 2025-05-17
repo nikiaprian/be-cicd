@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copy kode sumber ke dalam kontainer
 COPY . .
-
+COPY .env .env
 # Unduh dependensi Go dan build aplikasi menjadi binary
 RUN go mod tidy
 RUN go build -o app-binary
