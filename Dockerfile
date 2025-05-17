@@ -22,6 +22,6 @@ COPY --from=builder /app/app-binary .
 
 # Copy file konfigurasi atau environment
 # COPY .env.example .env
-
+# 
 # Menjalankan aplikasi binary
 CMD ["./app-binary"]
