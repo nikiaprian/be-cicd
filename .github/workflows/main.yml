@@ -30,7 +30,7 @@ jobs:
           AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}
           AWS_REGION=us-west-2
-          AWS_BUCKET=skripsi-codein
+          AWS_BUCKET=niks-codein
           EOF
 
     - name: Build Docker Image
